@@ -94,12 +94,50 @@ The dataset contains sensor readings collected from industrial machines.
 
 ---
 
-
-
-This ensures that the AI model decisions are transparent and trustworthy.
-
----
-
 ## ⚙ How To Run This Project
 
 ### Step 1: Clone Repository
+
+### Step 2: Install Dependencies
+
+### Step 3: Run Notebooks in Order
+1. 01_data_preprocessing.ipynb  
+2. 02_model_training.ipynb  
+3. 03_explainability.ipynb  
+
+### Step 4: Run Prediction Script
+
+
+
+
+---
+
+## 🚀 Future Improvements
+
+- Deploy as Streamlit Web Application
+- Integrate with Live IoT Sensors
+- Cloud Deployment (AWS / Azure)
+- Use Deep Learning Models
+- Add Real-Time Dashboard Monitoring
+
+---
+
+## 💼 Business Impact
+
+By predicting failures before they occur, FactoryGuard AI:
+
+- Reduces downtime cost
+- Improves maintenance planning
+- Increases machine lifespan
+- Enhances production efficiency
+
+This makes it suitable for smart manufacturing environments and Industry 4.0 systems.
+
+---
+
+## 👨‍💻 Author
+
+Patel Aashvi
+Integrated MSc IT Student  
+Specialization: AI & Machine Learning  
+
