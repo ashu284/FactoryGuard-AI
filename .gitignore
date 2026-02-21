@@ -1,30 +1,25 @@
-# Python
+# Python cache
 __pycache__/
-*.py[cod]
 *.pyc
-*.pyo
-*.pyd
-.Python
-env/
+
+# Virtual environment
 venv/
+env/
 .venv/
-pip-log.txt
-pip-delete-this-directory.txt
 
-# Jupyter
+# Jupyter Notebook checkpoints
 .ipynb_checkpoints/
-*.ipynb_checkpoints
 
-# Data & models (don't push large files to GitHub)
-data/
-models/*.pkl
-models/*.joblib
-reports/
-
-# IDE / OS files
+# VS Code settings
 .vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
+
+# OS files
 .DS_Store
 Thumbs.db
+
+# Large data files (optional)
+data/raw/
+data/processed/
+
+# Model files (optional if large)
+models/*.pkl
