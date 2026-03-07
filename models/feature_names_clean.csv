@@ -1,0 +1,14 @@
+0
+Air_temperature
+Process_temperature
+Rotational_speed
+Torque
+Tool_wear
+Type_L
+Type_M
+tool_wear_roll_4h
+torque_roll_4h
+rpm_roll_4h
+tool_wear_ema
+torque_ema
+tool_wear_lag_1h

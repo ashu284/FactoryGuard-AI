@@ -1,143 +1,134 @@
-# 🏭 FactoryGuard AI – IoT Predictive Maintenance Engine
+# FactoryGuard AI – Predictive Maintenance System
 
-## 📌 Introduction
+**Project 1 – Tabular/IoT Prediction**  
+**Data Science Engineering Track – Cohort Zeta**  
+**Infotact Solutions – Q4 2025 Capstone**
 
-FactoryGuard AI is an Industrial AI system designed to predict machine failure before it happens.  
-The goal of this project is to reduce unplanned downtime in manufacturing environments using Machine Learning.
+A production-grade system that predicts machine failure 24 hours in advance using sensor data (temperature, torque, rotational speed, tool wear, etc.), with high performance, SHAP explainability, and real-time Flask API.
 
-In large-scale industries, unexpected machine failure can cost approximately $10,000 per hour.  
-This system predicts failure 24 hours in advance using sensor data, helping companies save money and improve operational efficiency.
+**Dataset**  
+AI4I 2020 Predictive Maintenance Dataset (10,000 rows, ~3.4% failure rate)
 
----
+**Tech Stack** (aligned with memo)  
+- Python 3.10+  
+- Pandas, NumPy, Scikit-learn  
+- XGBoost (final model)  
+- SMOTE (imbalance)  
+- SHAP (explainability)  
+- Flask (API)  
+- Joblib (serialization)
 
-## 🎯 Problem Statement
+**Project Structure**
+FACTORYGUARD-AI/
+├── data/
+│   ├── raw/ai4i_predictive_maintenance.csv
+│   └── processed/
+├── models/
+│   ├── best_model_xgb.pkl
+│   └── feature_names_clean.csv
+├── notebooks/
+│   ├── 01_eda.ipynb
+│   ├── 02_baseline_model.ipynb
+│   ├── 03_feature_engineering.ipynb
+│   └── 04_explainability_SHAP.ipynb
+├── src/
+│   ├── modeling/
+│   │   └── predict.py          # prediction + SHAP logic
+│   └── app.py                  # Flask API
+├── reports/
+│   ├── shap_summary_beeswarm_week3.png
+│   ├── shap_summary_bar_week3.png
+│   └── confusion_matrix_xgb.png
+├── requirements.txt
+└── README.md
 
-A manufacturing facility operates 500+ robotic machines.
+## 4-Week Sprint Summary
 
-Challenges:
-- Unexpected equipment breakdown
-- High downtime cost
-- Manual maintenance scheduling
-- Lack of predictive monitoring
+### Week 1 – Data Engineering & EDA
+- Loaded raw CSV
+- Dropped non-predictive columns: UDI, Product ID, TWF, HDF, PWF, OSF, RNF
+- One-hot encoded `Type` → `Type_L`, `Type_M`
+- Added temporal features:
+  - Rolling mean (4h ≈ 240 min window)
+  - EMA (alpha=0.1)
+  - Lag (1h ≈ 60 min shift)
+- Filled missing values (bfill + 0 fallback)
+- Class distribution: ~96.61% no failure, ~3.39% failure
 
-Objective:
-Build a Binary Classification Model that predicts whether a machine will fail within the next 24 hours based on sensor readings.
+**Key files**  
+- `notebooks/01_eda.ipynb`  
+- Processed data saved to `data/processed/`
 
----
+### Week 2 – Modeling & Baseline
+- Stratified train-test split (80/20)
+- SMOTE oversampling on training set only
+- Trained XGBoost with RandomizedSearchCV (optimized for F1-score)
+- Final model: `best_model_xgb.pkl`
+- Evaluation: High recall on failure class, good macro F1
+- Saved model + cleaned feature names
 
-## 📊 Dataset Description
+**Key files**  
+- `notebooks/02_baseline_model.ipynb`  
+- `notebooks/03_feature_engineering.ipynb`
 
-Dataset: AI4I Predictive Maintenance Dataset
+### Week 3 – Interpretability & Trust (XAI)
+- Used SHAP TreeExplainer on XGBoost
+- Computed SHAP values on test set
+- Generated & saved:
+  - Beeswarm summary plot → feature impact direction
+  - Bar summary plot → importance ranking
+  - Force plots for multiple failure cases
+- Validation:
+  - Top features: Tool_wear, torque_roll_4h, Torque, tool_wear_ema
+  - High tool wear/torque/temperature → strong positive SHAP (failure risk up)
+  - Aligns with manufacturing physics: wear & stress drive failures
 
-The dataset contains sensor readings collected from industrial machines.
+**Key files**  
+- `notebooks/04_explainability_SHAP.ipynb`  
+- Outputs: `reports/shap_summary_beeswarm_week3.png`, `reports/shap_summary_bar_week3.png`, `reports/force_plot_failure_*.png`
 
-### Input Features:
-- Air Temperature [K]
-- Process Temperature [K]
-- Rotational Speed [rpm]
-- Torque [Nm]
-- Tool Wear [min]
-- Machine Type (Categorical)
+### Week 4 – Deployment Wrapper (Flask API)
+- Modular inference in `src/modeling/predict.py`:
+  - Load model
+  - Preprocess input (clean names, fill missing with 0)
+  - Predict probability
+  - Compute SHAP + top contributors
+- Flask server `src/app.py`:
+  - `/` → home page with endpoints
+  - `/health` → model status
+  - `/predict` (POST) → probability + SHAP explanation
 
-### Target Variable:
-- Machine Failure  
-  - 0 → No Failure  
-  - 1 → Failure  
+**How to run the API**
 
----
+1. Install dependencies
+ pip install flask joblib shap pandas numpy xgboost requests
+2. Start server
+cd src
+python app.py
 
-## 🛠 Technologies Used
+→ See: `* Running on http://127.0.0.1:5000`
 
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- SHAP (Model Explainability)
-- Matplotlib
-- Jupyter Notebook
+Keep this terminal open.
 
----
+3. Test health (in new PowerShell)
+curl.exe http://127.0.0.1:5000/health
 
-## 📈 Project Workflow
+Expected:
 
-### 1️⃣ Data Preprocessing
-- Removed unnecessary columns (UDI, Product ID)
-- Converted categorical variables using encoding
-- Handled missing values
-- Created clean processed dataset
-
-### 2️⃣ Exploratory Data Analysis (EDA)
-- Checked distribution of features
-- Visualized correlations
-- Identified important sensor variables
-
-### 3️⃣ Model Training
-- Used Random Forest Classifier
-- Split data into training and testing sets
-- Trained model on processed dataset
-
-### 4️⃣ Model Evaluation
-- Accuracy Score
-- Precision
-- Recall
-- F1-Score
-- Confusion Matrix
-
-### 5️⃣ Model Explainability
-- Used SHAP (SHapley Additive exPlanations)
-- Identified most important features affecting prediction
-- Ensured transparency and interpretability
-
-### 6️⃣ Model Saving
-- Saved trained model as `.pkl` file
-- Created prediction script for real-time use
-
----
-
-## ⚙ How To Run This Project
-
-### Step 1: Clone Repository
-
-### Step 2: Install Dependencies
-
-### Step 3: Run Notebooks in Order
-1. 01_data_preprocessing.ipynb  
-2. 02_model_training.ipynb  
-3. 03_explainability.ipynb  
-
-### Step 4: Run Prediction Script
-
-
-
-
----
-
-## 🚀 Future Improvements
-
-- Deploy as Streamlit Web Application
-- Integrate with Live IoT Sensors
-- Cloud Deployment (AWS / Azure)
-- Use Deep Learning Models
-- Add Real-Time Dashboard Monitoring
-
----
-
-## 💼 Business Impact
-
-By predicting failures before they occur, FactoryGuard AI:
-
-- Reduces downtime cost
-- Improves maintenance planning
-- Increases machine lifespan
-- Enhances production efficiency
-
-This makes it suitable for smart manufacturing environments and Industry 4.0 systems.
-
----
-
-## 👨‍💻 Author
-
-Patel Aashvi
-Integrated MSc IT Student  
-Specialization: AI & Machine Learning  
-
+```json
+{"model_loaded": true, "status": "healthy"}
+4. Test prediction (easiest way)
+python -c "import requests; r = requests.post('http://127.0.0.1:5000/predict', json={'Air_temperature':298.1, 'Process_temperature':308.6, 'Rotational_speed':1551, 'Torque':42.8, 'Tool_wear':0, 'Type_L':0, 'Type_M':0}); print(r.text)"
+Expected output (example):
+{
+  "failure_probability": 3.256e-07,
+  "failure_risk": "Low/Medium",
+  "shap_explanation": {
+    "expected_value": -0.00625,
+    "top_contributors": [
+      {"feature": "Torque", "shap_value": 3.071, "feature_value": 42.8},
+      {"feature": "Tool_wear", "shap_value": 2.263, "feature_value": 0.0},
+      ...
+    ]
+  }
+}
