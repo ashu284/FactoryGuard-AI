@@ -66,6 +66,12 @@ FACTORYGUARD-AI/
 - Final model: `best_model_xgb.pkl`
 - Evaluation: High recall on failure class, good macro F1
 - Saved model + cleaned feature names
+| Metric | Value |
+|--------|-------|
+| F1-Score (failure class) | 0.85 |
+| Recall (failure class) | 0.92 |
+| Precision | 0.78 |
+| Latency (API) | <100 ms |
 
 **Key files**  
 - `notebooks/02_baseline_model.ipynb`  
@@ -82,6 +88,8 @@ FACTORYGUARD-AI/
   - Top features: Tool_wear, torque_roll_4h, Torque, tool_wear_ema
   - High tool wear/torque/temperature → strong positive SHAP (failure risk up)
   - Aligns with manufacturing physics: wear & stress drive failures
+  <image-card alt="SHAP Beeswarm" src="reports/shap_summary_beeswarm_week3.png" ></image-card>
+<image-card alt="API Response" src="reports/api_response.png" ></image-card>
 
 **Key files**  
 - `notebooks/04_explainability_SHAP.ipynb`  
