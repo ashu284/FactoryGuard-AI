@@ -20,3 +20,10 @@ if prediction[0] == 1:
     print("⚠ Machine Failure Predicted in Next 24 Hours!")
 else:
     print("✅ Machine Operating Normally")
+    if __name__ == "__main__":
+    predict.run(
+        debug=True,
+        host="0.0.0.0",
+        port=5000,
+        threaded=True
+    )

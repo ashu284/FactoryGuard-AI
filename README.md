@@ -18,29 +18,6 @@ AI4I 2020 Predictive Maintenance Dataset (10,000 rows, ~3.4% failure rate)
 - Flask (API)  
 - Joblib (serialization)
 
-**Project Structure**
-FACTORYGUARD-AI/
-├── data/
-│   ├── raw/ai4i_predictive_maintenance.csv
-│   └── processed/
-├── models/
-│   ├── best_model_xgb.pkl
-│   └── feature_names_clean.csv
-├── notebooks/
-│   ├── 01_eda.ipynb
-│   ├── 02_baseline_model.ipynb
-│   ├── 03_feature_engineering.ipynb
-│   └── 04_explainability_SHAP.ipynb
-├── src/
-│   ├── modeling/
-│   │   └── predict.py          # prediction + SHAP logic
-│   └── app.py                  # Flask API
-├── reports/
-│   ├── shap_summary_beeswarm_week3.png
-│   ├── shap_summary_bar_week3.png
-│   └── confusion_matrix_xgb.png
-├── requirements.txt
-└── README.md
 
 ## 4-Week Sprint Summary
 
